@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
 
@@ -33,33 +34,37 @@ public class LINQQueriesTests
     public void Query1_FindPeopleWithAgeBetween30And40AndHobbiesIncludeReading_ReturnsCorrectPeople()
     {
         // Act
-        var result = new List<String>();
+        var result = new List<Person>(people);
+        var result2 = result.Where(person => person.Age >= 30 && person.Age <= 40).Where(person => person.Hobbies.Contains("Reading")).Select(person => person.Name).ToList();
+        Console.WriteLine(result);
 
         // Assert
-        Assert.AreEqual(1, result.Count());
-        Assert.Contains("David", result);
+        Assert.AreEqual(1, result2.Count());
+        Assert.Contains("David", result2);
     }
 
     [Test]
     public void Query2_FindNamesOfPeopleWithAtLeastTwoHobbies_ReturnsCorrectNames()
     {
         // Act
-        var result = new List<String>();
+        var result = new List<Person>(people);
+        var result2 = result.Where(person => person.Hobbies.Count >= 2).Select(person => person.Name).ToList();
 
         // Assert
-        Assert.AreEqual(5, result.Count());
-        Assert.Contains("Bob", result);
-        Assert.Contains("Charlie", result);
-        Assert.Contains("Eve", result);
-        Assert.Contains("David", result);
-        Assert.Contains("Alice", result);
+        Assert.AreEqual(5, result2.Count());
+        Assert.Contains("Bob", result2);
+        Assert.Contains("Charlie", result2);
+        Assert.Contains("Eve", result2);
+        Assert.Contains("David", result2);
+        Assert.Contains("Alice", result2);
     }
 
     [Test]
     public void Query3_CountTotalNumberOfHobbiesAcrossAllPeople_ReturnsCorrectCount()
     {
         // Act
-        var result = new List<String>();
+        var result2 = new List<Person>(people);
+        var result = result2.Select(person => person.Hobbies.Count).ToList().Sum();
 
         // Assert
         Assert.AreEqual(10, result);
